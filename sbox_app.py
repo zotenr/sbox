@@ -295,7 +295,6 @@ def run_nezha():
 def run_sbox(binpath):
     global sbox_proc
     sbox_proc = subprocess.Popen([binpath, 'run', '-D', str(FILE_PATH), '-c', str(config_path)],
-                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                  start_new_session=True)
     log(f'sbox 已启动 (pid {sbox_proc.pid})')
     time.sleep(4)
@@ -528,6 +527,13 @@ def start_server():
     upload_nodes()
     add_visit_task()
     clean_files()
+
+def watch_sbox():
+    while sbox_proc is not None and sbox_proc.poll() is None:
+        time.sleep(10)
+    if sbox_proc is not None:
+        log_error('watchdog: sbox 进程已退出, 结束本进程交由 supervisor 整体重启')
+        os._exit(1)
 
 def main():
     signal.signal(signal.SIGINT, stop_all)
