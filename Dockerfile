@@ -39,6 +39,6 @@ ENV SSH_ENABLED=false \
     SHOW_LOG=true \
     TZ=UTC
 
-EXPOSE 22 3000
+EXPOSE 3000 2022
 
 ENTRYPOINT ["/entrypoint.sh"]
