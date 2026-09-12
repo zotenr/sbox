@@ -45,6 +45,8 @@ serverurl=unix:///run/supervisor.sock
 command=sh -c "python3 /opt/sbox/sbox_app.py 2>&1 | tee -a /var/log/sup/sbox.log"
 autostart=true
 autorestart=true
+stopasgroup=true
+killasgroup=true
 startsecs=3
 priority=30
 stdout_logfile=/dev/stdout
@@ -74,6 +76,8 @@ if [ -n "${CLFL_TOKEN:-}" ]; then
 command=sh -c "cloudflared tunnel run --token \"$CLFL_TOKEN\" 2>&1 | tee -a /var/log/sup/clfl.log"
 autostart=true
 autorestart=true
+stopasgroup=true
+killasgroup=true
 startsecs=5
 priority=10
 stdout_logfile=/dev/stdout
