@@ -63,7 +63,7 @@ if [ "$SSH_ENABLED_L" = "true" ]; then
 fi
 
 if [ -n "$CT" ]; then
-    printf '\n[program:clfl]\ncommand=sh -c "/opt/bin/clfl tunnel run --token \"$CLFL_TOKEN\" 2>&1 | tee -a /var/log/sup/clfl.log"\nautostart=true\nautorestart=true\nstartsecs=5\npriority=10\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0\n' >> "$CONF"
+    printf '\n[program:clfl]\ncommand=sh -c "${CLFL_BIN:-cloudflared} tunnel run --token \"$CLFL_TOKEN\" 2>&1 | tee -a /var/log/sup/clfl.log"\nautostart=true\nautorestart=true\nstartsecs=5\npriority=10\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0\n' >> "$CONF"
 fi
 
 echo "[entrypoint] supervisord: sbox$( [ "$SSH_ENABLED_L" = true ] && echo ' + sshd' )$( [ -n "$CT" ] && echo ' + clfl' )"
