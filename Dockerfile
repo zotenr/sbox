@@ -2,7 +2,7 @@ FROM alpine:3.21
 
 ARG TARGETARCH
 
-RUN apk add --no-cache supervisor openssh jq curl python3 ca-certificates tzdata
+RUN apk add --no-cache supervisor bash openssh jq curl python3 ca-certificates tzdata
 
 # cloudflared: Alpine armhf 无此包, 统一从官方 GitHub release 按架构下载
 RUN set -eux; \
