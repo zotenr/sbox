@@ -2,7 +2,19 @@ FROM alpine:3.21
 
 ARG TARGETARCH
 
-RUN apk add --no-cache supervisor cloudflared openssh jq curl python3 ca-certificates tzdata
+RUN apk add --no-cache supervisor openssh jq curl python3 ca-certificates tzdata
+
+# cloudflared: Alpine armhf 无此包, 统一从官方 GitHub release 按架构下载
+RUN set -eux; \
+    case "$TARGETARCH" in \
+      amd64) CA=amd64;; \
+      arm64) CA=arm64;; \
+      arm)   CA=arm-v7;; \
+      *) echo "unsupported arch $TARGETARCH" && exit 1;; \
+    esac; \
+    curl -fL --retry 3 -o /usr/bin/cloudflared \
+      "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${CA}"; \
+    chmod +x /usr/bin/cloudflared
 
 # 精简版 sing-box（vless/vmess + ws/http/httpupgrade/tcp + TLS/REALITY + 内置cloudflared隧道 + socks/http入口）
 RUN set -eux; \
