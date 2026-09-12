@@ -9,7 +9,7 @@ RUN set -eux; \
     case "$TARGETARCH" in \
       amd64) CA=amd64;; \
       arm64) CA=arm64;; \
-      arm)   CA=arm-v7;; \
+      arm)   CA=arm;; \
       *) echo "unsupported arch $TARGETARCH" && exit 1;; \
     esac; \
     curl -fL --retry 3 -o /usr/bin/cloudflared \
