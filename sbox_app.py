@@ -467,16 +467,38 @@ def clean_files():
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
+
         if path == f'/{SUB_PATH}':
             self.send_response(200)
             self.send_header('Content-Type', 'text/plain; charset=utf-8')
             self.end_headers()
             self.wfile.write(sub_txt_content.encode())
+
         elif path == '/':
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html; charset=utf-8')
-            self.end_headers()
-            self.wfile.write(f'Hello! 访问 /{SUB_PATH} 获取订阅'.encode())
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            html_files = [f for f in os.listdir(base_dir) if f.lower().endswith('.html')]
+
+            if html_files:
+                # 优先 index.html，否则取第一个
+                if 'index.html' in html_files:
+                    chosen = 'index.html'
+                else:
+                    chosen = sorted(html_files)[0]
+
+                with open(os.path.join(base_dir, chosen), 'rb') as f:
+                    content = f.read()
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.send_header('Content-Length', str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            else:
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(b'no html file found')
+
         else:
             self.send_response(404)
             self.end_headers()
