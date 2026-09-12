@@ -294,8 +294,7 @@ def run_nezha():
 # =========================== 启动 sbox ===========================
 def run_sbox(binpath):
     global sbox_proc
-    sbox_proc = subprocess.Popen([binpath, 'run', '-D', str(FILE_PATH), '-c', str(config_path)],
-                                 start_new_session=True)
+    sbox_proc = subprocess.Popen([binpath, 'run', '-D', str(FILE_PATH), '-c', str(config_path)])  # 留在supervisor进程组内
     log(f'sbox 已启动 (pid {sbox_proc.pid})')
     time.sleep(4)
     if sbox_proc.poll() is not None:
